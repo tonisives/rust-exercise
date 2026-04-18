@@ -14,5 +14,5 @@ pub fn after(start: DateTime) -> DateTime {
 
     // assume date and time 1 gigasecond after a certain date
 
-    // todo!("What time is a gigasecond later than {start}");
+    // note: easier solution:     start_date + Duration::seconds(1_000_000_000)
 }
