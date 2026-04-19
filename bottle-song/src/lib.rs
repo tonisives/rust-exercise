@@ -16,9 +16,9 @@ pub fn recite(start_bottles: u32, take_down: u32) -> String {
 fn lines(bottles: u32) -> [String; 4] {
     let as_str = num_as_str(bottles);
     [
-        format!("{} green bottles hanging on the wall,", as_str),
-        format!("{} green bottles hanging on the wall,", as_str),
-        format!("{}", "And if one green bottle should accidentally fall,"),
+        format!("{} green bottles hanging on the wall,\n", as_str),
+        format!("{} green bottles hanging on the wall,\n", as_str),
+        format!("{}", "And if one green bottle should accidentally fall,\n"),
         last_line(bottles),
     ]
 }
