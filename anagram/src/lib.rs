@@ -15,8 +15,8 @@ pub fn anagrams_for<'a>(word: &str, possible_anagrams: &[&'a str]) -> HashSet<&'
 pub fn is_anagram(a: &str, b: &str) -> bool {
     // how to find anagram? sort both of the strings and see if they match
 
-    let mut a_arr: Vec<char> = a.chars().collect();
-    let mut b_arr: Vec<char> = b.chars().collect();
+    let mut a_arr: Vec<char> = a.chars().flat_map(|c| c.to_lowercase()).collect();
+    let mut b_arr: Vec<char> = b.chars().flat_map(|c| c.to_lowercase()).collect();
 
     if a_arr == b_arr {
         false
