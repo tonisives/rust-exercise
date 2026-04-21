@@ -36,7 +36,17 @@ impl<R: Read> ReadStats<R> {
 
 impl<R: Read> Read for ReadStats<R> {
     fn read(&mut self, buf: &mut [u8]) -> Result<usize> {
-        todo!("Collect statistics about this call reading {buf:?}")
+        let res = self.wrapped.read(buf)?;
+
+        // same as
+        // let res = match self.wrapped.read(buf) {
+        //     Ok(res) => res,
+        //     Err(err) => return Err(err),
+        // };
+
+        self.bytes_through += res;
+        self.reads += 1;
+        Ok(res)
     }
 }
 
@@ -73,10 +83,13 @@ impl<W: Write> WriteStats<W> {
 
 impl<W: Write> Write for WriteStats<W> {
     fn write(&mut self, buf: &[u8]) -> Result<usize> {
-        todo!("Collect statistics about this call writing {buf:?}")
+        let bytes = self.wrapped.write(buf)?;
+        self.bytes_through += bytes;
+        self.writes += 1;
+        Ok(bytes)
     }
 
     fn flush(&mut self) -> Result<()> {
-        todo!()
+        self.wrapped.flush()
     }
 }
