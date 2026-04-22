@@ -8,8 +8,8 @@ pub fn find(array: &[i32], key: i32) -> Option<usize> {
     find_offset(array, key, 0)
 }
 
-pub fn find_offset(array: &[i32], key: i32, offset: u32) -> Option<usize> {
-    if array.len() == 0 {
+fn find_offset(array: &[i32], key: i32, offset: usize) -> Option<usize> {
+    if array.is_empty() {
         return None;
     }
 
@@ -20,7 +20,7 @@ pub fn find_offset(array: &[i32], key: i32, offset: u32) -> Option<usize> {
         Some(mid + offset as usize)
     } else if key > mid_val {
         let right = &array[mid + 1..];
-        find_offset(right, key, offset + mid as u32 + 1)
+        find_offset(right, key, offset + mid + 1)
     } else {
         let left = &array[0..mid];
         find_offset(left, key, offset)
