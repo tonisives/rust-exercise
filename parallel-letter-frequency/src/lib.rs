@@ -11,22 +11,30 @@ use std::{
 //     }
 // );
 pub fn frequency(input: &[&str], worker_count: usize) -> HashMap<char, usize> {
+    if input.len() == 0 {
+        return HashMap::new();
+    }
     let mut res: HashMap<char, usize> = HashMap::new();
-    let chunks = input.chunks(worker_count);
+    let chunks = input.chunks(
+        input
+            .len()
+            .div_ceil(worker_count),
+    );
 
     let handles: Vec<_> = chunks
-        .map(|chunk| spawn_counter(chunk).join())
+        .map(|chunk| spawn_counter(chunk))
         .collect();
+
     handles
-        .iter()
-        .for_each(|handle| match handle {
-            Ok(handle_ok) => handle_ok
-                .iter()
-                .for_each(|(char, size)| {
-                    *res.entry(*char)
-                        .or_insert(0) += size
-                }),
-            Err(_) => (),
+        .into_iter()
+        .for_each(|handle| {
+            if let Ok(map) = handle.join() {
+                map.iter()
+                    .for_each(|(char, size)| {
+                        *res.entry(*char)
+                            .or_insert(0) += size
+                    })
+            }
         });
 
     res
