@@ -8,7 +8,7 @@ fn no_texts() {
 }
 
 #[test]
-#[ignore]
+
 fn one_text_with_one_letter() {
     let mut hm = HashMap::new();
     hm.insert('a', 1);
@@ -16,7 +16,7 @@ fn one_text_with_one_letter() {
 }
 
 #[test]
-#[ignore]
+
 fn one_text_with_multiple_letters() {
     let mut hm = HashMap::new();
     hm.insert('b', 2);
@@ -26,7 +26,7 @@ fn one_text_with_multiple_letters() {
 }
 
 #[test]
-#[ignore]
+
 fn two_texts_with_one_letter() {
     let mut hm = HashMap::new();
     hm.insert('e', 1);
@@ -35,7 +35,7 @@ fn two_texts_with_one_letter() {
 }
 
 #[test]
-#[ignore]
+
 fn two_texts_with_multiple_letters() {
     let mut hm = HashMap::new();
     hm.insert('g', 2);
@@ -45,7 +45,7 @@ fn two_texts_with_multiple_letters() {
 }
 
 #[test]
-#[ignore]
+
 fn case_insensitivity() {
     let mut hm = HashMap::new();
     hm.insert('a', 2);
@@ -53,21 +53,21 @@ fn case_insensitivity() {
 }
 
 #[test]
-#[ignore]
+
 fn many_empty_lines() {
     let v = vec![""; 1000];
     assert_eq!(frequency::frequency(&v[..], 4), HashMap::new());
 }
 
 #[test]
-#[ignore]
+
 fn ignore_whitespace() {
     let v = ["   ", "\t", "\r\n"];
     assert_eq!(frequency::frequency(&v[..], 4), HashMap::new());
 }
 
 #[test]
-#[ignore]
+
 fn many_times_same_text() {
     let v = vec!["abc"; 1000];
     let mut hm = HashMap::new();
@@ -78,19 +78,19 @@ fn many_times_same_text() {
 }
 
 #[test]
-#[ignore]
+
 fn punctuation_doesnt_count() {
     assert!(!frequency::frequency(&WILHELMUS, 4).contains_key(&','));
 }
 
 #[test]
-#[ignore]
+
 fn numbers_dont_count() {
     assert!(!frequency::frequency(&["Testing, 1, 2, 3"], 4).contains_key(&'1'));
 }
 
 #[test]
-#[ignore]
+
 fn unicode_letters() {
     let mut hm = HashMap::new();
     hm.insert('本', 1);
@@ -102,7 +102,7 @@ fn unicode_letters() {
 }
 
 #[test]
-#[ignore]
+
 fn all_three_anthems_1_worker() {
     let mut v = Vec::new();
     // These constants can be found under the last test if you wish to see them
@@ -118,7 +118,7 @@ fn all_three_anthems_1_worker() {
 }
 
 #[test]
-#[ignore]
+
 fn all_three_anthems_3_workers() {
     let mut v = Vec::new();
     for anthem in [ODE_AN_DIE_FREUDE, WILHELMUS, STAR_SPANGLED_BANNER].iter() {
@@ -133,7 +133,7 @@ fn all_three_anthems_3_workers() {
 }
 
 #[test]
-#[ignore]
+
 fn non_integer_multiple_of_threads() {
     let v = vec!["abc"; 999];
     let mut hm = HashMap::new();
@@ -144,7 +144,7 @@ fn non_integer_multiple_of_threads() {
 }
 
 #[test]
-#[ignore]
+
 fn large_texts() {
     let expected: HashMap<char, usize> = [
         ('a', 845),
