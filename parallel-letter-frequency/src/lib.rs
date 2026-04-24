@@ -3,6 +3,8 @@ use std::{
     thread::{Scope, ScopedJoinHandle, scope},
 };
 
+mod concurrency;
+
 // todo!(
 //     "Count the frequency of letters in the given input '{input:?}'. Ensure that you are using {} to process the input.",
 //     match worker_count {
