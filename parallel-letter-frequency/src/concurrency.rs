@@ -24,29 +24,28 @@ async fn run_frequency(input: &[&str], worker_count: usize) -> HashMap<char, usi
     );
 
     // spawn jobs into set
-    for chunk in chunks {
-        // note: we could use join_all for no copy, but that runs on single thread
-        let owned: Vec<String> = chunk
+    for slice in chunks {
+        let chunk = slice
             .iter()
-            .map(|s| s.to_string())
+            .map(|it| it.to_string())
             .collect();
-
-        set.spawn(async move { count(owned) });
+        set.spawn(async move { count(chunk) });
     }
 
     // wait jobs in set with while
-    while let Some(res) = set
+    while let Some(handle) = set
         .join_next()
         .await
     {
-        if let Ok(map) = res {
-            for (c, n) in map {
+        if let Ok(res) = handle {
+            for (c, count) in res {
                 *result
                     .entry(c)
-                    .or_insert(0) += n;
+                    .or_insert(0) += count;
             }
         }
     }
+
     result
 }
 
