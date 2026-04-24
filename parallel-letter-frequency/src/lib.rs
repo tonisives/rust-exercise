@@ -1,6 +1,6 @@
 use std::{
     collections::HashMap,
-    thread::{JoinHandle, spawn},
+    thread::{Scope, ScopedJoinHandle, scope, spawn},
 };
 
 // todo!(
@@ -21,17 +21,19 @@ pub fn frequency(input: &[&str], worker_count: usize) -> HashMap<char, usize> {
             .div_ceil(worker_count),
     );
 
-    let handles: Vec<_> = chunks
-        .map(|chunk| spawn_counter(chunk))
-        .collect();
+    scope(|s| {
+        let handles: Vec<_> = chunks
+            .map(|chunk| spawn_counter(s, chunk))
+            .collect();
 
-    handles
-        .into_iter()
-        .for_each(|handle| {
-            if let Ok(map) = handle.join() {
-                add_to_map(map, &mut res);
-            }
-        });
+        handles
+            .into_iter()
+            .for_each(|handle| {
+                if let Ok(map) = handle.join() {
+                    add_to_map(map, &mut res);
+                }
+            });
+    });
 
     res
 }
@@ -45,16 +47,15 @@ fn add_to_map(from: HashMap<char, usize>, into: &mut HashMap<char, usize>) {
         })
 }
 
-fn spawn_counter(input: &[&str]) -> JoinHandle<HashMap<char, usize>> {
-    let copy: Vec<String> = input
-        .iter()
-        .map(|c| c.to_string())
-        .collect();
-
-    spawn(move || {
+fn spawn_counter<'scope, 'env>(
+    s: &'scope Scope<'scope, 'env>,
+    input: &'scope [&str],
+) -> ScopedJoinHandle<'scope, HashMap<char, usize>> {
+    s.spawn(move || {
         let mut res: HashMap<char, usize> = HashMap::new();
 
-        copy.iter()
+        input
+            .iter()
             .for_each(|str| add_chars(str, &mut res));
 
         res
