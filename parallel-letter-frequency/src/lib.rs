@@ -13,6 +13,7 @@ mod concurrency;
 //     }
 // );
 pub fn frequency(input: &[&str], worker_count: usize) -> HashMap<char, usize> {
+    return concurrency::frequency(input, worker_count);
     if input.is_empty() {
         return HashMap::new();
     }

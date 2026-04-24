@@ -7,13 +7,11 @@ pub fn frequency(input: &[&str], worker_count: usize) -> HashMap<char, usize> {
     }
 
     let runtime = runtime::Builder::new_multi_thread()
-        .worker_threads(worker_count)
+        .worker_threads(worker_count.max(1))
         .build()
         .unwrap();
 
-    runtime.block_on(run_frequency(input, worker_count));
-
-    HashMap::new()
+    runtime.block_on(run_frequency(input, worker_count))
 }
 
 async fn run_frequency(input: &[&str], worker_count: usize) -> HashMap<char, usize> {
@@ -25,13 +23,27 @@ async fn run_frequency(input: &[&str], worker_count: usize) -> HashMap<char, usi
 
     let mut set = JoinSet::new();
     for chunk in chunks {
-        set.spawn(async move { count(chunk) });
+        // note: we could use join_all for no copy, but that runs on single thread
+        let owned: Vec<String> = chunk
+            .iter()
+            .map(|s| s.to_string())
+            .collect();
+
+        set.spawn(async move { count(owned) });
     }
 
-    HashMap::new()
+    let mut result = HashMap::new();
+    while let Some(res) = set.join_next().await {
+        if let Ok(map) = res {
+            for (c, n) in map {
+                *result.entry(c).or_insert(0) += n;
+            }
+        }
+    }
+    result
 }
 
-fn count(chunk: &[&str]) -> HashMap<char, usize> {
+fn count(chunk: Vec<String>) -> HashMap<char, usize> {
     let mut res = HashMap::new();
     for s in chunk {
         for c in s
