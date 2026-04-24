@@ -1,6 +1,6 @@
 use std::{
     collections::HashMap,
-    thread::{Scope, ScopedJoinHandle, scope, spawn},
+    thread::{Scope, ScopedJoinHandle, scope},
 };
 
 // todo!(
@@ -11,14 +11,14 @@ use std::{
 //     }
 // );
 pub fn frequency(input: &[&str], worker_count: usize) -> HashMap<char, usize> {
-    if input.len() == 0 {
+    if input.is_empty() {
         return HashMap::new();
     }
     let mut res: HashMap<char, usize> = HashMap::new();
     let chunks = input.chunks(
         input
             .len()
-            .div_ceil(worker_count),
+            .div_ceil(worker_count.max(1)),
     );
 
     scope(|s| {
@@ -39,10 +39,10 @@ pub fn frequency(input: &[&str], worker_count: usize) -> HashMap<char, usize> {
 }
 
 fn add_to_map(from: HashMap<char, usize>, into: &mut HashMap<char, usize>) {
-    from.iter()
+    from.into_iter()
         .for_each(|(char, size)| {
             *into
-                .entry(*char)
+                .entry(char)
                 .or_insert(0) += size
         })
 }
