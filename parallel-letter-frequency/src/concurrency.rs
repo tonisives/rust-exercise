@@ -15,13 +15,15 @@ pub fn frequency(input: &[&str], worker_count: usize) -> HashMap<char, usize> {
 }
 
 async fn run_frequency(input: &[&str], worker_count: usize) -> HashMap<char, usize> {
+    let mut result = HashMap::new();
+    let mut set = JoinSet::new();
     let chunks = input.chunks(
         input
             .len()
             .div_ceil(worker_count.max(1)),
     );
 
-    let mut set = JoinSet::new();
+    // spawn jobs into set
     for chunk in chunks {
         // note: we could use join_all for no copy, but that runs on single thread
         let owned: Vec<String> = chunk
@@ -32,11 +34,16 @@ async fn run_frequency(input: &[&str], worker_count: usize) -> HashMap<char, usi
         set.spawn(async move { count(owned) });
     }
 
-    let mut result = HashMap::new();
-    while let Some(res) = set.join_next().await {
+    // wait jobs in set with while
+    while let Some(res) = set
+        .join_next()
+        .await
+    {
         if let Ok(map) = res {
             for (c, n) in map {
-                *result.entry(c).or_insert(0) += n;
+                *result
+                    .entry(c)
+                    .or_insert(0) += n;
             }
         }
     }
