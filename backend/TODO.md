@@ -1,0 +1,4 @@
+- create axum web server
+- add health enpoint
+- connect to postgres
+- add getPools endpoint
