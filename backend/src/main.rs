@@ -3,7 +3,9 @@ use tokio::net::TcpListener;
 
 #[tokio::main]
 async fn main() {
-    let app = Router::new().route("/", get(root_handler));
+    let app = Router::new()
+        .route("/", get(root_handler))
+        .route("/health", get(health));
     let port = 3000;
 
     let listener = TcpListener::bind(format!("127.0.0.1:{}", port))
@@ -17,4 +19,8 @@ async fn main() {
 
 async fn root_handler() -> &'static str {
     "Hello from Axum!"
+}
+
+async fn health() -> &'static str {
+    "{}"
 }
