@@ -1,17 +1,12 @@
-use std::env;
-
 use axum::{Router, extract::State, routing::get, serve};
-use sqlx::{PgPool, postgres::PgPoolOptions};
 use tokio::net::TcpListener;
-
 use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt};
+
+mod app_state;
+use app_state::AppState;
 
 #[tokio::main]
 async fn main() {
-    let env = Env {
-        DATABASE_URL: env::var("DATABASE_URL").unwrap(),
-    };
-
     tracing_subscriber::registry()
         .with(
             tracing_subscriber::EnvFilter::try_from_default_env()
@@ -20,19 +15,7 @@ async fn main() {
         .with(tracing_subscriber::fmt::layer())
         .init();
 
-    let state = AppState {
-        db: PgPoolOptions::new()
-            .max_connections(10)
-            .min_connections(1)
-            .acquire_timeout(std::time::Duration::from_secs(5))
-            .idle_timeout(std::time::Duration::from_secs(300))
-            .max_lifetime(std::time::Duration::from_secs(1800))
-            .test_before_acquire(true)
-            .connect_lazy(&env.DATABASE_URL)
-            .unwrap(),
-        env,
-    };
-
+    let state = app_state::init();
     tracing::info!("Connected to db");
 
     let app = Router::new()
@@ -55,18 +38,6 @@ async fn main() {
 struct PoolJson {
     name: String,
     apy: f32,
-}
-
-#[derive(Clone)]
-#[allow(non_snake_case)]
-struct Env {
-    DATABASE_URL: String,
-}
-
-#[derive(Clone)]
-struct AppState {
-    db: PgPool,
-    env: Env,
 }
 
 async fn pools(State(state): State<AppState>) -> &'static str {
