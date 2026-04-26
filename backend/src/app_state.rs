@@ -9,8 +9,8 @@ struct Env {
 
 #[derive(Clone)]
 pub struct AppState {
-    db: PgPool,
-    env: Env,
+    pub db: PgPool,
+    pub env: Env,
 }
 
 pub fn init() -> AppState {
