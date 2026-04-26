@@ -5,6 +5,9 @@ use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt};
 mod app_state;
 use app_state::AppState;
 
+mod pools;
+use pools::get_pools;
+
 #[tokio::main]
 async fn main() {
     tracing_subscriber::registry()
@@ -21,7 +24,7 @@ async fn main() {
     let app = Router::new()
         .route("/", get(root_handler))
         .route("/health", get(health))
-        .route("/pools", get(pools))
+        .route("/pools", get(get_pools))
         .with_state(state);
 
     let port = 3000;
@@ -33,15 +36,6 @@ async fn main() {
     tracing::info!("server running on {}", port);
 
     serve(listener, app).await.unwrap();
-}
-
-struct PoolJson {
-    name: String,
-    apy: f32,
-}
-
-async fn pools(State(state): State<AppState>) -> &'static str {
-    "Hello from pools!"
 }
 
 async fn root_handler() -> &'static str {
