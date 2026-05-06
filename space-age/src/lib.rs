@@ -13,9 +13,7 @@ impl From<u64> for Duration {
 }
 
 pub trait Planet {
-    fn years_during(d: &Duration) -> f64 {
-        todo!("convert a duration ({d:?}) to the number of years on this planet for that duration");
-    }
+    fn years_during(d: &Duration) -> f64;
 }
 
 pub struct Mercury;
@@ -29,15 +27,43 @@ pub struct Neptune;
 
 const EARTH_SECONDS_PER_YEAR: f64 = 31_557_600.0;
 
-impl Planet for Mercury {}
-impl Planet for Venus {}
+impl Planet for Mercury {
+    fn years_during(d: &Duration) -> f64 {
+        d.seconds as f64 / EARTH_SECONDS_PER_YEAR / 0.2408467
+    }
+}
+impl Planet for Venus {
+    fn years_during(d: &Duration) -> f64 {
+        d.seconds as f64 / EARTH_SECONDS_PER_YEAR / 0.61519726
+    }
+}
 impl Planet for Earth {
     fn years_during(d: &Duration) -> f64 {
         d.seconds as f64 / EARTH_SECONDS_PER_YEAR
     }
 }
-impl Planet for Mars {}
-impl Planet for Jupiter {}
-impl Planet for Saturn {}
-impl Planet for Uranus {}
-impl Planet for Neptune {}
+impl Planet for Mars {
+    fn years_during(d: &Duration) -> f64 {
+        d.seconds as f64 / EARTH_SECONDS_PER_YEAR / 1.8808158
+    }
+}
+impl Planet for Jupiter {
+    fn years_during(d: &Duration) -> f64 {
+        d.seconds as f64 / EARTH_SECONDS_PER_YEAR / 11.862615
+    }
+}
+impl Planet for Saturn {
+    fn years_during(d: &Duration) -> f64 {
+        d.seconds as f64 / EARTH_SECONDS_PER_YEAR / 29.447498
+    }
+}
+impl Planet for Uranus {
+    fn years_during(d: &Duration) -> f64 {
+        d.seconds as f64 / EARTH_SECONDS_PER_YEAR / 84.016846
+    }
+}
+impl Planet for Neptune {
+    fn years_during(d: &Duration) -> f64 {
+        d.seconds as f64 / EARTH_SECONDS_PER_YEAR / 164.79132
+    }
+}
