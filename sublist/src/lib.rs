@@ -1,3 +1,18 @@
+// TODO: better way would be to use windows() or loop the shorter array windows and compare them
+// with the logner array
+//
+//   haystack.windows(needle.len()).any(|window| window == needle)
+//
+//  Equivalent to windows(), but more explicit:
+//
+//  for start in 0..=haystack.len() - needle.len() {
+//      if &haystack[start..start + needle.len()] == needle {
+//          return true;
+//      }
+//  }
+
+//
+
 #[derive(Debug, PartialEq, Eq)]
 pub enum Comparison {
     Equal,
