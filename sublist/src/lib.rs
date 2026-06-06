@@ -41,6 +41,10 @@ pub fn sublist(first_list: &[i32], second_list: &[i32]) -> Comparison {
                 &mut is_super_list,
                 i,
             );
+
+            if is_super_list {
+                break;
+            }
         }
     }
 
@@ -57,6 +61,10 @@ pub fn sublist(first_list: &[i32], second_list: &[i32]) -> Comparison {
                     &mut is_sub_list,
                     i,
                 );
+
+                if is_sub_list {
+                    break;
+                }
             }
         }
 
@@ -70,30 +78,25 @@ pub fn sublist(first_list: &[i32], second_list: &[i32]) -> Comparison {
 
 // detect a as sublist in b
 fn detect_sublist(a: &[i32], b: &[i32], ctr: &mut usize, is_sub_list: &mut bool, i: usize) {
-    if a.len() == 0 {
+    if a.is_empty() {
         *is_sub_list = true;
         return;
     }
 
-    if a.len() > 0 && *ctr < a.len() {
-        if !*is_sub_list && b[i] == a[*ctr] {
-            *is_sub_list = true;
-            *ctr += 1;
-        } else if *is_sub_list {
-            let is_equal = b[i] == a[*ctr];
-            *ctr += 1;
-
-            if a.len() - 1 > i && b.len() - 1 > i {
-                println!("[{}, {}],  {} isEqual {}", a[i], b[i], ctr, is_equal);
-            }
-            if !is_equal {
-                // edge case: repeating start character
-                if b[i - 1] == b[i] {
-                    return;
-                }
-                *is_sub_list = false;
-                *ctr = 0;
-            }
-        }
+    if *is_sub_list || i + 1 < a.len() {
+        return;
     }
+
+    let start = i + 1 - a.len();
+    *ctr = 0;
+
+    for offset in 0..a.len() {
+        if b[start + offset] != a[offset] {
+            return;
+        }
+
+        *ctr += 1;
+    }
+
+    *is_sub_list = true;
 }

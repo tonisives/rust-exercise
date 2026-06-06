@@ -180,3 +180,13 @@ fn same_digits_but_different_numbers() {
     let expected = Comparison::Unequal;
     assert_eq!(output, expected);
 }
+
+#[test]
+
+fn interrupted_partial_match_does_not_count_as_sublist() {
+    let list_one: &[i32] = &[0, 0];
+    let list_two: &[i32] = &[0, 1, 0];
+    let output = sublist(list_one, list_two);
+    let expected = Comparison::Unequal;
+    assert_eq!(output, expected);
+}
