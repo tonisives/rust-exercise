@@ -26,6 +26,8 @@ pub fn sublist(first_list: &[i32], second_list: &[i32]) -> Comparison {
         }
         if is_equal {
             return Comparison::Equal;
+        } else {
+            return Comparison::Unequal;
         }
     }
 
@@ -76,7 +78,7 @@ fn detect_sublist(a: &[i32], b: &[i32], ctr: &mut usize, is_sub_list: &mut bool,
             let is_equal = b[i] == a[*ctr];
             *ctr += 1;
 
-            if a.len() - 1 > i && b.len() > i {
+            if a.len() - 1 > i && b.len() - 1 > i {
                 println!("[{}, {}],  {} isEqual {}", a[i], b[i], ctr, is_equal);
             }
             if !is_equal {
