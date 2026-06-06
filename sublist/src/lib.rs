@@ -87,7 +87,12 @@ fn detect_sublist(a: &[i32], b: &[i32], ctr: &mut usize, is_sub_list: &mut bool,
                 println!("[{}, {}],  {} isEqual {}", a[i], b[i], ctr, is_equal);
             }
             if !is_equal {
+                // edge case: repeating start character
+                if b[i - 1] == b[i] {
+                    return;
+                }
                 *is_sub_list = false;
+                *ctr = 0;
             }
         }
     }
