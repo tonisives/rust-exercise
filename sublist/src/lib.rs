@@ -68,8 +68,13 @@ pub fn sublist(first_list: &[i32], second_list: &[i32]) -> Comparison {
     }
 }
 
-// a: sublist
+// detect a as sublist in b
 fn detect_sublist(a: &[i32], b: &[i32], ctr: &mut usize, is_sub_list: &mut bool, i: usize) {
+    if a.len() == 0 {
+        *is_sub_list = true;
+        return;
+    }
+
     if a.len() > 0 && *ctr < a.len() - 1 {
         if !*is_sub_list && b[i] == a[*ctr] {
             *is_sub_list = true;
