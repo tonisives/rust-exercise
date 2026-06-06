@@ -75,7 +75,7 @@ fn detect_sublist(a: &[i32], b: &[i32], ctr: &mut usize, is_sub_list: &mut bool,
         return;
     }
 
-    if a.len() > 0 && *ctr < a.len() - 1 {
+    if a.len() > 0 && *ctr < a.len() {
         if !*is_sub_list && b[i] == a[*ctr] {
             *is_sub_list = true;
             *ctr += 1;
