@@ -14,7 +14,8 @@ pub fn annotate(garden: &[&str]) -> Vec<String> {
             if row[j] == b'*' {
                 mapped_row[j] = b'*'
             } else {
-                mapped_row[j] = find_nearby_count(i, j, garden)
+                let count = find_nearby_count(i, j, garden);
+                mapped_row[j] = if count == 0 { b' ' } else { b'0' + count };
             }
         }
 
@@ -37,28 +38,37 @@ fn find_nearby_count(i: usize, j: usize, garden: &[&str]) -> u8 {
     let mut count = 0;
 
     for d in DIRECTIONS {
-        if i == 0 && d.1 == 1 {
+        // row guards (vertical)
+        if i == 0 && d.0 == -1 {
             // don't go up
             continue;
         }
-
-        if i == garden.len() - 1 && d.1 == -1 {
+        if i == garden.len() - 1 && d.0 == 1 {
             // don't go down
             continue;
         }
 
-        if j == 0 && d.0 == -1 {
+        // col guards (horizontal)
+        if j == 0 && d.1 == -1 {
             // don't go left
             continue;
         }
-
-        if j == garden[0].len() - 1 && d.0 == 1 {
+        if j + 1 == garden[i].len() && d.1 == 1 {
             // don't go right
             continue;
         }
 
-        println!("i:{i}, j:{j}, d{d:?}");
-        if garden[(i as i64 + d.1) as usize].as_bytes()[(j as i64 + d.0) as usize] == b'*' {
+        let ni = i as i64 + d.0;
+        let nj = j as i64 + d.1;
+
+        if ni < 0 || nj < 0 {
+            continue;
+        }
+
+        let ni = ni as usize;
+        let nj = nj as usize;
+
+        if garden[ni].as_bytes()[nj] == b'*' {
             count += 1;
         }
     }
