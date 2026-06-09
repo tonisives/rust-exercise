@@ -1,7 +1,18 @@
 pub fn square(s: u32) -> u64 {
-    todo!("grains of rice on square {s}");
+    const BASE: u64 = 2;
+    if s == 1 {
+        return 1;
+    }
+
+    return BASE.pow(s - 1);
 }
 
 pub fn total() -> u64 {
-    todo!();
+    let mut total = 0;
+
+    for i in 1..=64 {
+        total += square(i);
+    }
+
+    total
 }
