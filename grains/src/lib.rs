@@ -1,9 +1,5 @@
 pub fn square(s: u32) -> u64 {
     const BASE: u64 = 2;
-    if s == 1 {
-        return 1;
-    }
-
     return BASE.pow(s - 1);
 }
 
