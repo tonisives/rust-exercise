@@ -24,9 +24,44 @@ pub fn annotate(garden: &[&str]) -> Vec<String> {
     res
 }
 
+#[rustfmt::skip]
+const DIRECTIONS: [(i64, i64); 8] = [
+    (-1, 1), (0, 1), (1, 1),
+    (-1, 0),          (1, 0),
+    (-1, -1), (0, -1), (1, -1)
+];
+
 fn find_nearby_count(i: usize, j: usize, garden: &[&str]) -> u8 {
     // don't go left/top/right/bottom if on the edge. otherwise, loop neighbours and count the mines
-    //
 
-    b'*'
+    let mut count = 0;
+
+    for d in DIRECTIONS {
+        if i == 0 && d.1 == 1 {
+            // don't go up
+            continue;
+        }
+
+        if i == garden.len() - 1 && d.1 == -1 {
+            // don't go down
+            continue;
+        }
+
+        if j == 0 && d.0 == -1 {
+            // don't go left
+            continue;
+        }
+
+        if j == garden[0].len() - 1 && d.0 == 1 {
+            // don't go right
+            continue;
+        }
+
+        println!("i:{i}, j:{j}, d{d:?}");
+        if garden[(i as i64 + d.1) as usize].as_bytes()[(j as i64 + d.0) as usize] == b'*' {
+            count += 1;
+        }
+    }
+
+    count
 }
