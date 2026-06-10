@@ -12,7 +12,6 @@ fn year_divisible_by_2_not_divisible_by_4_in_common_year() {
 }
 
 #[test]
-
 fn year_divisible_by_4_not_divisible_by_100_in_leap_year() {
     assert!(is_leap_year(1996));
 }
