@@ -1,5 +1,3 @@
-mod validator;
-
 /// Check a Luhn checksum.
 pub fn is_valid(code: &str) -> bool {
     // start at the end, double every second number
