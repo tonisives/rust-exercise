@@ -38,8 +38,8 @@ pub fn is_valid(code: &str) -> bool {
     }
 
     if invalid || (sum == 0 && digit_count == 1) {
-        return false;
+        false
     } else {
-        return sum % 10 == 0;
+        sum % 10 == 0
     }
 }
