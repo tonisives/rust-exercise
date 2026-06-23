@@ -38,20 +38,34 @@ pub enum Error {
 pub fn convert(number: &[u32], from_base: u32, to_base: u32) -> Result<Vec<u32>, Error> {
     // todo!("Convert {number:?} from base {from_base} to base {to_base}")
 
-    // plan: for each base, convert to binary, and then to to_base
+    if from_base < 2 {
+        return Err(Error::InvalidInputBase);
+    }
 
-    let bin: Vec<u8> = match from_base {
-        2 => number.iter().map(|it| *it as u8).collect(),
-        _ => return Err(Error::InvalidInputBase),
-    };
+    if to_base < 2 {
+        return Err(Error::InvalidOutputBase);
+    }
 
-    let res: Vec<u32> = match to_base {
-        10 => {
-            let value = bin.iter().fold(0u32, |acc, &bit| acc * 2 + bit as u32);
-            vec![value]
-        }
-        _ => return Err(Error::InvalidOutputBase),
-    };
+    if let Some(&digit) = number.iter().find(|&&digit| digit >= from_base) {
+        return Err(Error::InvalidDigit(digit));
+    }
 
-    Ok(res)
+    let mut value = number
+        .iter()
+        .fold(0u32, |acc, &digit| acc * from_base + digit);
+
+    let mut result = Vec::new();
+
+    while value > 0 {
+        result.push(value % to_base);
+        value /= to_base;
+    }
+
+    result.reverse();
+
+    if result.is_empty() {
+        result.push(0);
+    }
+
+    Ok(result)
 }
