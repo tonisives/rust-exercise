@@ -1,5 +1,5 @@
 pub fn abbreviate(phrase: &str) -> String {
-    let mut acronym: Vec<char> = vec![];
+    let mut acronym = String::new();
     let mut prev_whitespace = true;
     let mut prev_lowercase = false;
 
@@ -29,5 +29,5 @@ pub fn abbreviate(phrase: &str) -> String {
         }
     }
 
-    acronym.into_iter().collect()
+    acronym
 }
