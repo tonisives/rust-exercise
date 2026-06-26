@@ -7,6 +7,10 @@ pub fn abbreviate(phrase: &str) -> String {
         if c == ' ' || c == '-' {
             prev_whitespace = true;
         } else {
+            if !c.is_alphabetic() {
+                continue;
+            }
+
             if prev_whitespace {
                 acronym.push(c.to_ascii_uppercase());
                 prev_whitespace = false;
