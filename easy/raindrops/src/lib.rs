@@ -1,12 +1,15 @@
 pub fn raindrops(n: u32) -> String {
     // 3, 5 and 7
-    let pling = if n % 3 == 0 { "Pling" } else { "" };
-    let plang = if n % 5 == 0 { "Plang" } else { "" };
-    let plong = if n % 7 == 0 { "Plong" } else { "" };
+    let sound = format!(
+        "{}{}{}",
+        if n % 3 == 0 { "Pling" } else { "" },
+        if n % 5 == 0 { "Plang" } else { "" },
+        if n % 7 == 0 { "Plong" } else { "" }
+    );
 
-    if pling == "" && plang == "" && plong == "" {
-        return format!("{n}");
+    if sound.is_empty() {
+        n.to_string()
+    } else {
+        sound
     }
-
-    format!("{pling}{plang}{plong}")
 }
