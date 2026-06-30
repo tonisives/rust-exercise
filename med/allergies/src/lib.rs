@@ -14,17 +14,17 @@ pub enum Allergen {
     Cats = 128,
 }
 
-pub const ALL: [Allergen; 8] = [
-    Allergen::Eggs,
-    Allergen::Peanuts,
-    Allergen::Shellfish,
-    Allergen::Strawberries,
-    Allergen::Tomatoes,
-    Allergen::Chocolate,
-    Allergen::Pollen,
-    Allergen::Cats,
-];
 impl Allergen {
+    pub const ALL: [Allergen; 8] = [
+        Allergen::Eggs,
+        Allergen::Peanuts,
+        Allergen::Shellfish,
+        Allergen::Strawberries,
+        Allergen::Tomatoes,
+        Allergen::Chocolate,
+        Allergen::Pollen,
+        Allergen::Cats,
+    ];
     pub fn score(self) -> u32 {
         self as u32
     }
@@ -33,7 +33,7 @@ impl Allergen {
 impl Allergies {
     pub fn new(score: u32) -> Self {
         Self {
-            allergies: ALL
+            allergies: Allergen::ALL
                 .iter()
                 .copied()
                 .filter(|allergen| score & allergen.score() != 0)
