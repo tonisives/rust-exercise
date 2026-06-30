@@ -8,14 +8,14 @@ pub fn sum_of_multiples(limit: u32, factors: &[u32]) -> u32 {
     let mut points: HashSet<u32> = HashSet::new();
 
     for &factor in factors {
-        if factor == 0 || factor >= limit {
+        if factor == 0 {
             continue;
         }
         let mut mult = factor;
 
         while mult < limit {
             points.insert(mult);
-            mult = mult + factor;
+            mult += factor;
         }
     }
 
