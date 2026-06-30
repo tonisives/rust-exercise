@@ -1,8 +1,8 @@
 pub struct Allergies {
-    score: u32,
+    allergies: Vec<Allergen>,
 }
 
-#[derive(Debug, PartialEq, Eq)]
+#[derive(Debug, PartialEq, Eq, Clone, Copy)]
 pub enum Allergen {
     Eggs = 1,
     Peanuts = 2,
@@ -14,31 +14,38 @@ pub enum Allergen {
     Cats = 128,
 }
 
+pub const ALL: [Allergen; 8] = [
+    Allergen::Eggs,
+    Allergen::Peanuts,
+    Allergen::Shellfish,
+    Allergen::Strawberries,
+    Allergen::Tomatoes,
+    Allergen::Chocolate,
+    Allergen::Pollen,
+    Allergen::Cats,
+];
+impl Allergen {
+    pub fn score(self) -> u32 {
+        self as u32
+    }
+}
+
 impl Allergies {
     pub fn new(score: u32) -> Self {
-        todo!("Given the '{score}' score, construct a new Allergies struct.");
+        Self {
+            allergies: ALL
+                .iter()
+                .copied()
+                .filter(|allergen| score & allergen.score() != 0)
+                .collect(),
+        }
     }
 
     pub fn is_allergic_to(&self, allergen: &Allergen) -> bool {
-        todo!("Determine if the patient is allergic to the '{allergen:?}' allergen.");
+        self.allergies.contains(allergen)
     }
 
     pub fn allergies(&self) -> Vec<Allergen> {
-        // TODO:
-        // for loop starts from the top.
-        // tests all numbers, finds first with modulo 0 and <= curr. adds as allergen
-        // removes this from the curr, continues the loop until curr = 0
-        // if have remainder without allergen, then ignore.
-
-        let curr = self.score;
-        let mut allergens: Vec<Allergen> = vec![];
-
-        for i in self.score..0 {}
-
-        // todo!(
-        //     "Return the list of allergens contained within the score with which the Allergies struct was made."
-        // );
-
-        vec![]
+        self.allergies.clone()
     }
 }
